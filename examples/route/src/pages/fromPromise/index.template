@@ -1,0 +1,16 @@
+<div class="root">
+  <p>
+    SomeData state: {{someData.state}}
+    value: {{someData.value || ''}}
+  </p>
+
+  <p>
+    Lazy value: {{lazy.current() || ''}}
+    <button @click="lazy.refresh()">Refresh</button>
+  </p>
+
+  <p>
+    Your name? <input v-model="name" />
+    Hello, {{echoName.value || ''}}
+  </p>
+</div>

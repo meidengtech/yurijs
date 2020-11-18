@@ -1,0 +1,71 @@
+@handler-width: 3px;
+
+.moving {
+  cursor: pointer;
+}
+
+.right {
+  position: absolute;
+  right: -@handler-width;
+  width: @handler-width * 2;
+  top: @handler-width;
+  bottom: @handler-width;
+  cursor: ew-resize;
+}
+.left {
+  position: absolute;
+  left: -@handler-width;
+  width: @handler-width * 2;
+  top: @handler-width;
+  bottom: @handler-width;
+  cursor: ew-resize;
+}
+.top {
+  position: absolute;
+  top: -@handler-width;
+  height: @handler-width * 2;
+  left: @handler-width;
+  right: @handler-width;
+  cursor: ns-resize;
+}
+.bottom {
+  position: absolute;
+  bottom: -@handler-width;
+  height: @handler-width * 2;
+  left: @handler-width;
+  right: @handler-width;
+  cursor: ns-resize;
+}
+
+.lt {
+  position: absolute;
+  top: -@handler-width;
+  left: -@handler-width;
+  width: @handler-width * 2;
+  height: @handler-width * 2;
+  cursor: nwse-resize;
+}
+.rt {
+  position: absolute;
+  top: -@handler-width;
+  right: -@handler-width;
+  width: @handler-width * 2;
+  height: @handler-width * 2;
+  cursor: nesw-resize;
+}
+.lb {
+  position: absolute;
+  bottom: -@handler-width;
+  left: -@handler-width;
+  width: @handler-width * 2;
+  height: @handler-width * 2;
+  cursor: nesw-resize;
+}
+.rb {
+  position: absolute;
+  bottom: -@handler-width;
+  right: -@handler-width;
+  width: @handler-width * 2;
+  height: @handler-width * 2;
+  cursor: nwse-resize;
+}

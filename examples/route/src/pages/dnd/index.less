@@ -1,0 +1,101 @@
+.canvas {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #eee;
+  position: relative;
+}
+
+.group {
+  background-color: white;
+  border-radius: 8px;
+  position: absolute;
+  padding: 12px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+
+  .container {
+    overflow-y: auto;
+    flex: 1;
+    margin-top: 16px;
+    padding-bottom: 2px;
+    flex-direction: column;
+    position: relative;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+
+  .delete {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+.item {
+  height: 32px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+
+  &.newItem {
+    position: absolute;
+    opacity: 0.8;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.btnGroup {
+  position: absolute;
+  right: 0px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: row-reverse;
+  pointer-events: none;
+
+  &.hide {
+    display: none;
+  }
+}
+
+.btn {
+  pointer-events: all;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  font-size: 24px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  background: white;
+  font-family: none;
+}
+
+// 拖拽中的对象需要禁用pointer-events以保证不阻挡事件。
+.createShadow {
+  pointer-events: none;
+}
+
+// 拖放对象产生明显标识
+.dropOver {
+  box-shadow: 0 0 8px 4px rgba(0, 0, 255, 1);
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: blue;
+}

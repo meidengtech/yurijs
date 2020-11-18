@@ -1,0 +1,8 @@
+<div class="root">
+  Hello, @yurijs!
+  <div>
+    <button @click="++counter">+</button>
+    {{counter}}
+    <button @click="--counter">-</button>
+  </div>
+</div>

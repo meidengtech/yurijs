@@ -1,0 +1,21 @@
+{
+  "name": "@yurijs/runtime",
+  "version": "0.0.8",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "prepublish": "npm run build"
+  },
+  "peerDependencies": {
+    "@types/classnames": "*",
+    "@types/react": "*",
+    "classnames": "*",
+    "mobx": "*",
+    "mobx-react-lite": "*",
+    "react": "*"
+  }
+}

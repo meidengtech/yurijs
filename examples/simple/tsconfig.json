@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": ["es5", "es2015", "dom"],
+    "jsx": "react",
+    "strict": true,
+    "allowJs": true,
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": false,
+    "outDir": "./dist/out-tsc",
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": { "customMatcher": "\\.less$" }
+      }
+    ]
+  },
+  "include": ["./src/**/*"]
+}

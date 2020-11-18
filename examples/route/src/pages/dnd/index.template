@@ -1,0 +1,47 @@
+<div class="canvas">
+  <!-- Resizable实现普通拖拽现有对象 -->
+  <resizable
+    v-for="group in groups"
+    :rect="group.rect"
+    class="group" :class="{
+      dropOver: dropTarget && dropTarget.type === 'group' && dropTarget.group === group,
+    }"
+    @moving="moveGroupToTop(group)"
+  >
+    <div
+      class="container"
+      @mouse-move="handleDragOverGroup($event, group)"
+      @mouse-leave="handleDragLeave"
+    >
+      <div
+        class="item"
+        :style="{backgroundColor: item === draggingItem ? 'gray' : item.color}"
+        v-for="item in group.items"
+        @mouse-down="handleItemMouseDown($event, item, group)"
+      />
+      <div
+        v-if="dropTarget && dropTarget.type === 'group' && dropTarget.group === group"
+        class="line"
+        :style="{top: dropTarget.index * 40}"
+      />
+    </div>
+    <div class="delete" @click="removeGroup(group)">×</div>
+  </resizable>
+
+  <!-- 新建中的分组 -->
+  <resizable class="group createShadow" :rect="newGroup.rect" v-if="newGroup">
+  </resizable>
+
+  <resizable class="item newItem createShadow" :style="{backgroundColor: draggingItem && draggingItem.color}" :rect="draggingItemPos" v-if="draggingItem" />
+
+  <div class="btnGroup">
+    <div v-if="!dragging" class="btn" @mouse-down="newGroupMovable.eventHandlers.onMouseDown($event)" >📗</div>
+    <div v-if="!dragging" class="btn" @mouse-down="newItemMovable.eventHandlers.onMouseDown($event)">＋</div>
+    <div
+      v-if="draggingFromGroup"
+      class="btn" :class="{dropOver: dropTarget && dropTarget.type === 'trash'}"
+      @mouse-enter="handleDragOverTrash"
+      @mouse-leave="handleDragLeave"
+    >🗑️</div>
+  </div>
+</div>

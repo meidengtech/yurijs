@@ -1,0 +1,12 @@
+{
+  "name": "@yurijs/hmr-template-loader",
+  "version": "0.0.8",
+  "license": "MIT",
+  "main": "loader.js",
+  "dependencies": {
+    "loader-utils": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@yurijs/template-loader": "^0.0.6"
+  }
+}
