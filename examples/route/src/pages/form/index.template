@@ -1,0 +1,9 @@
+<div class="root">
+  <p>Account: <input v-model="model.account"/></p>
+  <p>Password: <input type="password" v-model="model.password"/></p>
+  <p><button @click="login">Login</button></p>
+
+  <p>Account: <input v-model="editModel.account"/></p>
+  <p>Password: <input type="password" v-model="editModel.password"/></p>
+  <p><button @click="editModel.submit()">Save</button> <button @click="editModel.reset()">Reset</button></p>
+</div>

@@ -1,0 +1,15 @@
+{
+  "name": "@yurijs/html",
+  "version": "0.0.8",
+  "license": "MIT",
+  "main": "dist/cjs",
+  "module": "dist/es",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "run-s build:cjs build:es",
+    "build:cjs": "tsc --module CommonJS --outDir ./dist/cjs",
+    "build:es": "tsc",
+    "watch:es": "tsc -w",
+    "prepublish": "npm run build"
+  }
+}

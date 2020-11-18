@@ -1,0 +1,8 @@
+{
+  "packages": [
+    "@yurijs/*",
+    "examples/*"
+  ],
+  "version": "0.0.8",
+  "npmClient": "yarn"
+}

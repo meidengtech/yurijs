@@ -1,0 +1,8 @@
+<div class="root">
+  <link to="/counter">Counter</link>
+  <link to="/form">Form</link>
+  <link to="/life-cycle">Life cycle</link>
+  <link to="/from-promise">From Promise</link>
+  <link to="/page-list">Page List</link>
+  <link to="/dnd">Drag and drop</link>
+</div>

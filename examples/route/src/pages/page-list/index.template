@@ -1,0 +1,10 @@
+<div class="root">
+  <div class="search">Search: <input v-model="search" /></div>
+  <!-- <observer-item @intersect="loadMore"/> -->
+
+  <div v-if="list.empty">Empty!</div>
+  <div v-for="item in list.data">{{item}}</div>
+
+  <div v-if="list.loading">Loading...</div>
+  <observer-item v-else-if="list.hasMore" @intersect="list.loadMore()"></observer-item>
+</div>

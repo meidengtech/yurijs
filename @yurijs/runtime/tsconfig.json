@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "declaration": true,
+    "moduleResolution": "node",
+    "lib": ["es5", "es2015", "dom"],
+    "jsx": "react",
+    "strict": true,
+    "allowJs": true,
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": false,
+    "outDir": "./dist/out-tsc"
+  },
+  "include": ["./src/**/*"]
+}
