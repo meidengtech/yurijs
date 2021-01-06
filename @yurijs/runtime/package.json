@@ -5,6 +5,14 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "homepage": "https://github.com/meidengtech/yurijs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meidengtech/yurijs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/meidengtech/yurijs/issues"
+  },
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -cw",
