@@ -1,11 +1,17 @@
-const { getRemainingRequest } = require('loader-utils');
-
 module.exports = function loader() {
-  const remaining = '-!' + getRemainingRequest(this);
+  const resourcePath = this.resourcePath;
+
+  const templateLoaderOptions = {
+    defaultNS: '@yurijs/html',
+    styleExtension: '.less',
+    cssModules: true,
+  };
+
+  const templateLoader = `-!@yurijs/template-loader?${JSON.stringify(templateLoaderOptions)}!${resourcePath}`;
 
   if (!this.hot) {
     return `
-    import Component from ${JSON.stringify(remaining)};
+    import Component from ${JSON.stringify(templateLoader)};
     export default Component;
     `;
   }
@@ -13,7 +19,7 @@ module.exports = function loader() {
   import { observable, action } from 'mobx';
   import { observer } from 'mobx-react-lite';
   import { createElement } from 'react';
-  import RawComponent from ${JSON.stringify(remaining)};
+  import RawComponent from ${JSON.stringify(templateLoader)};
 
   var component = observable.box(RawComponent);
 
@@ -23,7 +29,7 @@ module.exports = function loader() {
   })
 
   if (module.hot) {
-    module.hot.accept(${JSON.stringify(remaining)}, action(() => {
+    module.hot.accept(${JSON.stringify(templateLoader)}, action(() => {
       component.set(RawComponent)
     }))
   }

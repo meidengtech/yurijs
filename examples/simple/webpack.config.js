@@ -40,14 +40,14 @@ module.exports = (_, argv) => {
                 {
                   loader: '@yurijs/hmr-template-loader',
                 },
-                {
-                  loader: '@yurijs/template-loader',
-                  options: {
-                    defaultNS: '@yurijs/html',
-                    styleExtension: '.less',
-                    cssModules: true,
-                  },
-                },
+                // {
+                //   loader: '@yurijs/template-loader',
+                //   options: {
+                //     defaultNS: '@yurijs/html',
+                //     styleExtension: '.less',
+                //     cssModules: true,
+                //   },
+                // },
               ]
             : [
                 {
