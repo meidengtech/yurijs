@@ -41,7 +41,7 @@ ${imports}
 
 export default function Template(_props) {
   const $props = useProps(_props);
-  ${ast.viewModel ? `var $vm = useViewModel(ViewModel)` : ''}
+  ${ast.viewModel ? `var $vm = useViewModel(ViewModel, $props)` : ''}
   var $proxy = useProxy($props, ${ast.viewModel ? `$vm, ` : ''});
   return useMemo(function() {
     return ${jsx};
