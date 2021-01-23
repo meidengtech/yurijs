@@ -74,8 +74,11 @@ function parseEventHandler(value, variables) {
       b.blockStatement([
         b.expressionStatement(
           b.callExpression(
-            b.memberExpression(b.identifier('$proxy'), b.identifier(value)),
-            [b.identifier('arguments')]
+            b.memberExpression(
+              b.memberExpression(b.identifier('$proxy'), b.identifier(value)),
+              b.identifier('apply')
+            ),
+            [b.identifier('$proxy'), b.identifier('arguments')]
           )
         ),
       ])
