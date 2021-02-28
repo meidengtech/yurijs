@@ -45,6 +45,9 @@ function renderNode(node) {
               ...node.conds.map((v, i) =>
                 b.ifStatement(v, b.returnStatement(b.literal(i)))
               ),
+              ...(node.hasElse
+                ? [b.returnStatement(b.literal(node.conds.length))]
+                : []),
             ])
           )
         ),
@@ -150,6 +153,7 @@ function render(ast, options) {
             kind: 'condition',
             type,
             conds: [child.cond[1]],
+            hasElse: false,
             children: [transformed],
           };
           ret.push(lastCondition);
@@ -161,6 +165,7 @@ function render(ast, options) {
           break;
         }
         case 'else': {
+          lastCondition.hasElse = true;
           lastCondition.children.push(transformed);
           lastCondition = null;
           break;
