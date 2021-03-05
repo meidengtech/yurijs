@@ -18,7 +18,7 @@ module.exports = function loader(source) {
   const ret = `
 import React, { createElement, Fragment, useMemo } from 'react';
 import { action } from 'mobx';
-import { useProps, useProxy, useViewModel } from ${JSON.stringify(
+import { useProps, useProxy, useViewModel, handleWithModifiers } from ${JSON.stringify(
     runtimeModule
   )};
 ${

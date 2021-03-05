@@ -3,6 +3,7 @@ const htmlparser2 = require('htmlparser2');
 const babelParser = require('@babel/parser');
 const camelCase = require('camelcase');
 const { visit, namedTypes: n, builders: b } = require('ast-types');
+const eventNameMap = require('./event-name-map');
 
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g;
 const identifierRE = /^[A-Za-z_]\w+$/;
@@ -11,6 +12,8 @@ const shortNS = {
   ':': 'v-bind',
   '@': 'v-on',
 };
+
+const modifierSymbol = '.';
 
 function normalizeComponentName(name) {
   return name
@@ -44,9 +47,20 @@ function parseType(name, namespaces, alias) {
   return [ns, name.substr(id + 1)];
 }
 
+function parseModifiers(name) {
+  const ret = {};
+  const modifiersArr =
+    name.indexOf(modifierSymbol) >= 0
+      ? name.split(modifierSymbol).slice(1)
+      : [];
+  modifiersArr.length > 0 && modifiersArr.forEach((m) => (ret[m] = true));
+  return ret;
+}
+
 function parsePropName(name, namespaces) {
+  const split = name.split(modifierSymbol);
   if (shortNS[name[0]]) {
-    return [shortNS[name[0]], name.substr(1)];
+    return [shortNS[name[0]], split[0].substr(1), parseModifiers(name)];
   }
   const id = name.indexOf(':');
   if (id === -1) {
@@ -57,11 +71,8 @@ function parsePropName(name, namespaces) {
   if (!ns) {
     throw new Error(`namespace \`${nspart}\` not found for: \`${name}\``);
   }
-  return [ns, name.substr(id + 1)];
-}
 
-function transformEventName(name) {
-  return 'on' + name.substr(0, 1).toUpperCase() + name.substr(1);
+  return [ns, split[0].substr(id + 1), parseModifiers(name)];
 }
 
 function parseEventHandler(value, variables) {
@@ -85,13 +96,11 @@ function parseEventHandler(value, variables) {
     );
   }
   const ast = parseExpression(value, variables);
-  return b.callExpression(b.identifier('action'), [
-    b.functionExpression(
-      null,
-      [b.identifier('$event')],
-      b.blockStatement([b.expressionStatement(ast)])
-    ),
-  ]);
+  return b.functionExpression(
+    null,
+    [b.identifier('$event')],
+    b.blockStatement([b.expressionStatement(ast)])
+  );
 }
 
 function parseFor(value, variables) {
@@ -129,7 +138,7 @@ function parseAttribs(el, attribs, namespaces) {
   }
 
   for (const [key, value] of Object.entries(attribs)) {
-    const [ns, name] = parsePropName(key, namespaces);
+    const [ns, name, modifiers] = parsePropName(key, namespaces);
 
     switch (ns) {
       case '': {
@@ -161,10 +170,14 @@ function parseAttribs(el, attribs, namespaces) {
         break;
       }
       case 'v-on': {
-        const propName = transformEventName(name);
-        el.handlers[camelCase(propName)] = parseEventHandler(value, {
-          ...el.variables,
-          $event: true,
+        const propName = eventNameMap[name];
+        el.handlers.push({
+          event: propName,
+          handler: parseEventHandler(`${value}`, {
+            ...el.variables,
+            $event: true,
+          }),
+          modifiers,
         });
         break;
       }
@@ -325,7 +338,7 @@ function parseHtml(text, options, paths) {
           tagName: name,
           type,
           props: {},
-          handlers: {},
+          handlers: [],
           model: null,
           bindings: null,
           cond: null,
