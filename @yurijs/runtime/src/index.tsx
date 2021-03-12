@@ -5,79 +5,40 @@ import {
   Children,
   useMemo,
   CSSProperties,
-  SyntheticEvent
+  SyntheticEvent,
 } from 'react';
 import classnames from 'classnames';
 import * as React from 'react';
 import { observable, action } from 'mobx';
 import { ClassValue } from 'classnames/types';
 
-type TEvent = SyntheticEvent & KeyboardEvent;
-
-type TEventProp = {
-  handler: (e: TEvent) => void,
-  modifiers: { [key: string]: boolean }
-}
-
-const keyCodes: { [key: string]: number | Array<number> } = {
-  esc: 27,
-  tab: 9,
-  enter: 13,
-  space: 32,
-  up: 38,
-  left: 37,
-  right: 39,
-  down: 40,
-  'delete': [8, 46],
+type EventProp = {
+  handler: (...args: unknown[]) => void;
+  modifiers: string[];
 };
 
-const isMatchedKey = <T extends keyof typeof keyCodes>(code: number, key: T) => {
-  if (Array.isArray(keyCodes[key])) {
-    const codes = keyCodes[key] as number[];
-    return codes.some((c: number) => c === code);
-  }
-  return code === keyCodes[key];
-};
-
-export const handleWithModifiers = function(props: TEventProp[]) {
-  return action(function($event: TEvent) {
-    props.forEach(function(prop: TEventProp) {
-      const keys = Object.keys(prop.modifiers);
-
-      // 没有 modifiers，正常执行
-      if (keys.length === 0) {
-        prop.handler($event);
-        return;
+export const handleWithModifiers = function (props: EventProp[]) {
+  return action(function ($event: SyntheticEvent, ...args: unknown[]) {
+    for (const prop of props) {
+      for (const key of prop.modifiers) {
+        if (key === 'self') {
+          if ($event.target !== $event.currentTarget) {
+            break;
+          }
+        } else if (key === 'stop') {
+          $event.stopPropagation();
+        } else if (key === 'prevent') {
+          $event.preventDefault();
+        }
       }
-
-      if ('self' in prop.modifiers && $event.target !== $event.currentTarget) {
-        return;
+      try {
+        prop.handler($event, ...args);
+      } catch (e) {
+        console.error(e.stack);
       }
-
-      if ('stop' in prop.modifiers) {
-        $event.stopPropagation();
-      }
-
-      if ('prevent' in prop.modifiers) {
-        $event.preventDefault();
-      }
-
-      // 假如是点击事件
-      if ('button' in $event) {
-        prop.handler($event);
-        return;
-      }
-
-      // 假如是键盘事件且匹配到目标 key
-      keys.some((key) => {
-        const isMatched = isMatchedKey($event.keyCode, key);
-        isMatched && (prop.handler($event));
-        return isMatched;
-      })
-    });
+    }
   });
 };
-
 
 /**
  * 文本中的 {{ }} 内嵌表达式
@@ -89,12 +50,12 @@ export const TextBlockBinding = observer(
       return null;
     }
     return ret;
-  },
+  }
 );
 
 export function mergeStyle(
   target: CSSProperties,
-  styles: CSSProperties | Array<CSSProperties>,
+  styles: CSSProperties | Array<CSSProperties>
 ): CSSProperties {
   if (Array.isArray(styles)) {
     for (const item of styles) {
@@ -132,14 +93,14 @@ export const PropertyBinding = observer(
       } else if (key === 'className') {
         additionProps[key] = classnames(
           val as ClassValue,
-          child.props.className,
+          child.props.className
         );
       } else {
         additionProps[key] = val;
       }
     }
     return cloneElement(child, additionProps);
-  },
+  }
 );
 
 export const CondBinding = observer(
@@ -156,7 +117,7 @@ export const CondBinding = observer(
       index = childArr.length;
     }
     return (Children.toArray(children)[index] as ReactElement) || null;
-  },
+  }
 );
 
 const RepeatBindingItem = <T extends unknown>({
@@ -196,12 +157,12 @@ export const RepeatBinding = observer(
         ))}
       </>
     );
-  },
+  }
 );
 
 export function computeClassName(
   expr: ClassValue,
-  styles?: { [key: string]: string },
+  styles?: { [key: string]: string }
 ): string {
   if (typeof expr !== 'string') {
     expr = classnames(expr);
@@ -272,7 +233,7 @@ export function useProxy<
         deleteProperty() {
           throw new Error('Cannot delete property in template.');
         },
-      },
+      }
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }, [props, vm]) as any;
@@ -289,7 +250,7 @@ interface ViewModelFactory<PropTypes> {
 
 export function useViewModel<PropTypes>(
   ViewModel: ViewModelFactory<PropTypes>,
-  $props: PropTypes,
+  $props: PropTypes
 ): ViewModel {
   const vm = useMemo(() => {
     return new ViewModel($props);

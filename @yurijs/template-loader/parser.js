@@ -170,7 +170,7 @@ function parseAttribs(el, attribs, namespaces) {
         break;
       }
       case 'v-on': {
-        const propName = eventNameMap[name];
+        const propName = eventNameMap[name] || camelCase('on-' + name);
         el.handlers.push({
           event: propName,
           handler: parseEventHandler(`${value}`, {

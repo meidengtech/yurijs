@@ -10,14 +10,14 @@
   >
     <div
       class="container"
-      @mouse-move="handleDragOverGroup($event, group)"
-      @mouse-leave="handleDragLeave"
+      @mousemove="handleDragOverGroup($event, group)"
+      @mouseleave="handleDragLeave"
     >
       <div
         class="item"
         :style="{backgroundColor: item === draggingItem ? 'gray' : item.color}"
         v-for="item in group.items"
-        @mouse-down="handleItemMouseDown($event, item, group)"
+        @mousedown.stop="handleItemMouseDown($event, item, group)"
       />
       <div
         v-if="dropTarget && dropTarget.type === 'group' && dropTarget.group === group"
@@ -35,13 +35,13 @@
   <resizable class="item newItem createShadow" :style="{backgroundColor: draggingItem && draggingItem.color}" :rect="draggingItemPos" v-if="draggingItem" />
 
   <div class="btnGroup">
-    <div v-if="!dragging" class="btn" @mouse-down="newGroupMovable.eventHandlers.onMouseDown($event)" >📗</div>
-    <div v-if="!dragging" class="btn" @mouse-down="newItemMovable.eventHandlers.onMouseDown($event)">＋</div>
+    <div v-if="!dragging" class="btn" @mousedown.stop="newGroupMovable.eventHandlers.onMouseDown($event)" >📗</div>
+    <div v-if="!dragging" class="btn" @mousedown.stop="newItemMovable.eventHandlers.onMouseDown($event)">＋</div>
     <div
       v-if="draggingFromGroup"
       class="btn" :class="{dropOver: dropTarget && dropTarget.type === 'trash'}"
-      @mouse-enter="handleDragOverTrash"
-      @mouse-leave="handleDragLeave"
+      @mouseenter="handleDragOverTrash"
+      @mouseleave="handleDragLeave"
     >🗑️</div>
   </div>
 </div>

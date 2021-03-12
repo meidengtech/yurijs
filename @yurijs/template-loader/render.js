@@ -22,16 +22,16 @@ function renderImports(map) {
 function combineHandlers(handlers) {
   const ret = {};
   for (let i = 0; i < handlers.length; i++) {
-      const current = handlers[i];
-      // 处理右键事件
-      if (current.event === eventNameMap.click && 'right' in current.modifiers) {
-        current.event = eventNameMap.contextmenu;
-      }
+    const current = handlers[i];
+    // 处理右键事件
+    if (current.event === eventNameMap.click && 'right' in current.modifiers) {
+      current.event = eventNameMap.contextmenu;
+    }
 
-      const { handler, modifiers, event } = current;
-      const props = {handler, modifiers};
+    const { handler, modifiers, event } = current;
+    const props = { handler, modifiers };
 
-      (ret[event] || (ret[event] = [])).push(props)
+    (ret[event] || (ret[event] = [])).push(props);
   }
   return ret;
 }
@@ -81,18 +81,26 @@ function renderNode(node) {
         b.objectProperty(b.literal(k), v)
       ),
       ...Object.entries(handlers).map(([k, v]) =>
-        b.objectProperty(b.literal(k), b.callExpression(b.identifier('handleWithModifiers'), [
-          b.arrayExpression([
-            ...v.map((p) => {
-              return b.objectExpression([
-                b.objectProperty(b.literal('handler'), p.handler),
-                b.objectProperty(b.literal('modifiers'), b.objectExpression([
-                  ...Object.entries(p.modifiers).map(([mk, mv]) => b.objectProperty(b.literal(mk), b.booleanLiteral(mv)))
-                ])),
-              ])
-            })
+        b.objectProperty(
+          b.literal(k),
+          b.callExpression(b.identifier('handleWithModifiers'), [
+            b.arrayExpression([
+              ...v.map((p) => {
+                return b.objectExpression([
+                  b.objectProperty(b.literal('handler'), p.handler),
+                  b.objectProperty(
+                    b.literal('modifiers'),
+                    b.arrayExpression([
+                      ...Object.entries(p.modifiers).map(([mk, mv]) =>
+                        b.literal(mk)
+                      ),
+                    ])
+                  ),
+                ]);
+              }),
+            ]),
           ])
-        ]))
+        )
       ),
     ]),
     ...children.map(renderNode),
