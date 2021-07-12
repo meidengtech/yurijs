@@ -20,6 +20,6 @@
     "style-to-object": "^0.3.0"
   },
   "peerDependencies": {
-    "@yurijs/runtime": "^0.0.6"
+    "@yurijs/runtime": "^0.1.3"
   }
 }
