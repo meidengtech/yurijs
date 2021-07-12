@@ -18,6 +18,6 @@
     "build:cjs": "tsc --module CommonJS --outDir ./dist/cjs",
     "build:es": "tsc",
     "watch:es": "tsc -w",
-    "prepublish": "npm run build"
+    "prepublish": "yarn build"
   }
 }

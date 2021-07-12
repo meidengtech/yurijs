@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -cw",
-    "prepublish": "npm run build"
+    "prepublish": "yarn build"
   },
   "peerDependencies": {
     "@types/classnames": "*",
