@@ -9,7 +9,7 @@ import {
 } from 'react';
 import classnames from 'classnames';
 import * as React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { ClassValue } from 'classnames/types';
 
 type EventProp = {
@@ -180,7 +180,11 @@ export function computeClassName(
 export function useProps<T>(props: T): T {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const $props = useMemo(() => observable(props), []);
-  Object.assign($props, props);
+  React.useEffect(() => {
+    runInAction(() => {
+      Object.assign($props, props);
+    });
+  });
   return $props;
 }
 
