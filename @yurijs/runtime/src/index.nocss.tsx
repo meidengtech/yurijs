@@ -4,13 +4,10 @@ import {
   ReactElement,
   Children,
   useMemo,
-  CSSProperties,
   SyntheticEvent,
 } from 'react';
-import classnames from 'classnames';
 import * as React from 'react';
 import { observable, action, runInAction } from 'mobx';
-import { ClassValue } from 'classnames/types';
 
 type EventProp = {
   handler: (...args: unknown[]) => void;
@@ -138,23 +135,6 @@ export const RepeatBinding = observer(
     );
   }
 );
-
-export function computeClassName(
-  expr: ClassValue,
-  styles?: { [key: string]: string }
-): string {
-  if (typeof expr !== 'string') {
-    expr = classnames(expr);
-  }
-  if (styles) {
-    expr = expr
-      .split(/\s+/)
-      .map((v) => styles[v])
-      .filter((v) => v)
-      .join(' ');
-  }
-  return expr;
-}
 
 export function useProps<T extends {}>(props: T): T {
   // eslint-disable-next-line react-hooks/exhaustive-deps
