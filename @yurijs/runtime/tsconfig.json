@@ -8,7 +8,6 @@
     "jsx": "react",
     "strict": true,
     "allowJs": true,
-    "importHelpers": true,
     "allowSyntheticDefaultImports": false,
     "outDir": "./dist/out-tsc"
   },

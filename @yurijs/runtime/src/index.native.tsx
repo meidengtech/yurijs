@@ -4,13 +4,10 @@ import {
   ReactElement,
   Children,
   useMemo,
-  CSSProperties,
   SyntheticEvent,
 } from 'react';
-import classnames from 'classnames';
 import * as React from 'react';
 import { observable, action, runInAction } from 'mobx';
-import { ClassValue } from 'classnames/types';
 
 type EventProp = {
   handler: (...args: unknown[]) => void;
@@ -57,19 +54,18 @@ export const TextBlockBinding = observer(
   }
 );
 
+
 export function mergeStyle(
-  target: CSSProperties,
-  styles: CSSProperties | Array<CSSProperties>
-): CSSProperties {
+  target: unknown[],
+  styles: unknown[] | unknown
+): unknown[] {
   if (Array.isArray(styles)) {
     for (const item of styles) {
       mergeStyle(target, item);
     }
     return target;
   }
-  if (styles && typeof styles === 'object') {
-    Object.assign(target, styles);
-  }
+  target.push(styles);
   return target;
 }
 
@@ -93,12 +89,7 @@ export const PropertyBinding = observer(
         val = val();
       }
       if (key === 'style') {
-        additionProps[key] = mergeStyle({}, [child.props.style, val]);
-      } else if (key === 'className') {
-        additionProps[key] = classnames(
-          val as ClassValue,
-          child.props.className
-        );
+        additionProps[key] = mergeStyle([], [child.props.style, val]);
       } else {
         additionProps[key] = val;
       }
@@ -163,23 +154,6 @@ export const RepeatBinding = observer(
     );
   }
 );
-
-export function computeClassName(
-  expr: ClassValue,
-  styles?: { [key: string]: string }
-): string {
-  if (typeof expr !== 'string') {
-    expr = classnames(expr);
-  }
-  if (styles) {
-    expr = expr
-      .split(/\s+/)
-      .map((v) => styles[v])
-      .filter((v) => v)
-      .join(' ');
-  }
-  return expr;
-}
 
 export function useProps<T extends {}>(props: T): T {
   // eslint-disable-next-line react-hooks/exhaustive-deps
