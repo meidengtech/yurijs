@@ -26,13 +26,13 @@ ${
 }
 ${
   // css modules
-  ast.styleSheet && options.cssModules
+  ast.styleSheet && options.cssModules && !options.noCss
     ? `import styles from ${JSON.stringify(ast.styleSheet)}`
     : ''
 }
 ${
   // import style module only.
-  ast.styleSheet && !options.cssModules
+  ast.styleSheet && !options.cssModules && !options.noCss
     ? `import ${JSON.stringify(ast.styleSheet)}`
     : ''
 }

@@ -119,7 +119,7 @@ function parseFor(value, variables) {
   ];
 }
 
-function parseAttribs(el, attribs, namespaces) {
+function parseAttribs(el, attribs, namespaces, options) {
   // 提前处理v-if & v-for，确保变量有效区域正确。
   if (attribs['v-if'] != null) {
     el.cond = ['if', parseExpression(attribs['v-if'], el.variables)];
@@ -158,19 +158,21 @@ function parseAttribs(el, attribs, namespaces) {
             break;
           }
           default: {
-            el.props[camelCase(name)] = value === '' ? true : value;
+            const propName = (typeof options.propNameMap === 'function' ? options.propNameMap(name) : options.propNameMap?.[name]) || camelCase(name);
+            el.props[propName] = value === '' ? true : value;
             break;
           }
         }
         break;
       }
       case 'v-bind': {
+        const propName = (typeof options.propNameMap === 'function' ? options.propNameMap(name) : options.propNameMap?.[name]) || camelCase(name);
         el.bindings = el.bindings || {};
-        el.bindings[camelCase(name)] = parseExpression(value, el.variables);
+        el.bindings[propName] = parseExpression(value, el.variables);
         break;
       }
       case 'v-on': {
-        const propName = eventNameMap[name] || camelCase('on-' + name);
+        const propName = (typeof options.eventNameMap === 'function' ? options.eventNameMap(name) : options.eventNameMap?.[name]) || camelCase('on-' + name);
         el.handlers.push({
           event: propName,
           handler: parseEventHandler(`${value}`, {
@@ -347,7 +349,7 @@ function parseHtml(text, options, paths) {
           children: [],
           variables: top.variables,
         };
-        parseAttribs(el, attribs, namespaces, root.props);
+        parseAttribs(el, attribs, namespaces, options);
         if (el.props.class || (el.bindings && el.bindings.class)) {
           root.styleSheet = paths.styleSheet;
         }

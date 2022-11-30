@@ -49,4 +49,27 @@ export default [
       }),
     ],
   },
+  {
+    input: 'src/index.nocss.tsx',
+    output: [
+      {
+        file: 'dist/index.nocss.js',
+        format: 'cjs',
+      },
+      {
+        file: 'dist/index.nocss.es.js',
+        format: 'es',
+      },
+    ],
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+    ],
+    plugins: [
+      typescript(),
+      clear({
+        targets: ['dist'],
+      }),
+    ],
+  },
 ];
